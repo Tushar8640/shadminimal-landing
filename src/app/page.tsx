@@ -34,6 +34,11 @@ import {
   X,
   CreditCard,
   Package,
+  Mail,
+  Send,
+  MapPin,
+  Clock,
+  LifeBuoy,
 } from "lucide-react";
 import { useTheme, PresetColor } from "@/components/theme/theme-provider";
 import { Badge } from "@/components/ui/badge";
@@ -213,6 +218,27 @@ export default function LandingPage() {
   const [isAnnual, setIsAnnual] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Contact Form State
+  const [contactName, setContactName] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactTopic, setContactTopic] = useState("General Inquiry");
+  const [contactMessage, setContactMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!contactName.trim() || !contactEmail.trim() || !contactMessage.trim()) return;
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      setContactName("");
+      setContactEmail("");
+      setContactMessage("");
+    }, 600);
+  };
+
   return (
     <div className="min-h-screen bg-[#F9FAFB] dark:bg-[#161C24] text-[#1C252E] dark:text-white transition-colors duration-200">
       {/* ========================================================================= */}
@@ -266,6 +292,9 @@ export default function LandingPage() {
             </a>
             <a href="#faq" className="hover:text-[#00A76F] transition-colors">
               FAQ
+            </a>
+            <a href="#contact" className="hover:text-[#00A76F] transition-colors">
+              Contact
             </a>
           </nav>
 
@@ -374,6 +403,13 @@ export default function LandingPage() {
                 className="p-2 rounded-lg hover:bg-[#919EAB]/8"
               >
                 Pricing
+              </a>
+              <a
+                href="#contact"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 rounded-lg hover:bg-[#919EAB]/8"
+              >
+                Contact
               </a>
             </nav>
             <div className="pt-2 border-t border-[#919EAB]/12 flex flex-col gap-2">
@@ -1002,7 +1038,212 @@ export default function LandingPage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 9. BOTTOM CTA BANNER                                                      */}
+      {/* 9. CONTACT SECTION                                                        */}
+      {/* ========================================================================= */}
+      <section id="contact" className="py-20 border-t border-[#919EAB]/12 bg-white dark:bg-[#1E2632]/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto space-y-4 mb-14">
+            <Badge variant="outline" className="text-[#00A76F] border-[#00A76F]/30 bg-[#00A76F]/8 text-xs font-bold">
+              Get in Touch
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1C252E] dark:text-white">
+              Let&apos;s Build Something Great Together
+            </h2>
+            <p className="text-sm sm:text-base text-[#637381] dark:text-[#919EAB]">
+              Have questions about ShadMinimal, custom licensing, or feature requests? Drop us a line and our engineering team will get back to you within hours.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto items-start">
+            {/* Left Column: Direct Info Cards */}
+            <div className="lg:col-span-5 space-y-4">
+              <div className="rounded-2xl border border-[#919EAB]/16 bg-[#F9FAFB] dark:bg-[#161C24] p-6 space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#00A76F]/12 text-[#00A76F] shrink-0">
+                    <Mail className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-[#1C252E] dark:text-white">Direct Email</h4>
+                    <p className="text-xs text-[#919EAB] mt-0.5">Reach our dedicated developer team</p>
+                    <a
+                      href="mailto:support@shadminimal.dev"
+                      className="text-xs font-semibold text-[#00A76F] hover:underline mt-1 inline-block"
+                    >
+                      support@shadminimal.dev
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#078DEE]/12 text-[#078DEE] shrink-0">
+                    <Clock className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-[#1C252E] dark:text-white">Fast Response SLA</h4>
+                    <p className="text-xs text-[#919EAB] mt-0.5">Average response time: &lt; 15 minutes</p>
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#22C55E] mt-1">
+                      <span className="h-2 w-2 rounded-full bg-[#22C55E] animate-pulse" />
+                      Support Team Online
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#8E33FF]/12 text-[#8E33FF] shrink-0">
+                    <MapPin className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-[#1C252E] dark:text-white">Global Headquarters</h4>
+                    <p className="text-xs text-[#919EAB] mt-0.5">San Francisco, CA & Remote Worldwide</p>
+                    <span className="text-xs text-[#637381] dark:text-[#919EAB] mt-1 block">
+                      Operating across all global timezones
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Status / GitHub Community Card */}
+              <div className="rounded-2xl border border-[#919EAB]/16 bg-gradient-to-br from-[#00A76F]/10 via-[#078DEE]/5 to-transparent p-6 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-[#00A76F]">Open Source & Docs</span>
+                  <GithubIcon className="h-4 w-4 text-[#637381] dark:text-[#919EAB]" />
+                </div>
+                <h4 className="text-sm font-bold text-[#1C252E] dark:text-white">
+                  Join our developer community
+                </h4>
+                <p className="text-xs text-[#637381] dark:text-[#919EAB] leading-relaxed">
+                  Contribute to the roadmap, report issues, and chat with hundreds of builders using ShadMinimal.
+                </p>
+                <a
+                  href={GITHUB_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-[#00A76F] hover:underline pt-1"
+                >
+                  <span>Visit GitHub Community</span>
+                  <ExternalLink className="h-3 w-3" />
+                </a>
+              </div>
+            </div>
+
+            {/* Right Column: Interactive Form */}
+            <div className="lg:col-span-7">
+              <div className="rounded-2xl border border-[#919EAB]/16 bg-white dark:bg-[#212B36] p-6 sm:p-8 shadow-xl">
+                {isSubmitted ? (
+                  <div className="py-12 text-center space-y-4 animate-in fade-in zoom-in-95 duration-200">
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#00A76F]/20 text-[#00A76F]">
+                      <Check className="h-7 w-7" />
+                    </div>
+                    <h3 className="text-xl font-bold text-[#1C252E] dark:text-white">
+                      Message Sent Successfully!
+                    </h3>
+                    <p className="text-xs text-[#637381] dark:text-[#919EAB] max-w-sm mx-auto leading-relaxed">
+                      Thank you for reaching out to the ShadMinimal team. We have received your inquiry and will reply to your email shortly.
+                    </p>
+                    <Button
+                      onClick={() => setIsSubmitted(false)}
+                      variant="outline"
+                      className="font-bold text-xs rounded-xl h-10 mt-2"
+                    >
+                      Send Another Message
+                    </Button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleContactSubmit} className="space-y-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold text-[#1C252E] dark:text-white mb-1.5">
+                          Full Name *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="e.g. Alex Harrison"
+                          value={contactName}
+                          onChange={(e) => setContactName(e.target.value)}
+                          className="w-full rounded-xl border border-[#919EAB]/20 bg-[#F9FAFB] dark:bg-[#161C24] px-3.5 py-2.5 text-xs text-[#1C252E] dark:text-white placeholder:text-[#919EAB] focus:border-[#00A76F] focus:outline-none transition-colors"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-[#1C252E] dark:text-white mb-1.5">
+                          Work Email *
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          placeholder="name@company.com"
+                          value={contactEmail}
+                          onChange={(e) => setContactEmail(e.target.value)}
+                          className="w-full rounded-xl border border-[#919EAB]/20 bg-[#F9FAFB] dark:bg-[#161C24] px-3.5 py-2.5 text-xs text-[#1C252E] dark:text-white placeholder:text-[#919EAB] focus:border-[#00A76F] focus:outline-none transition-colors"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-[#1C252E] dark:text-white mb-1.5">
+                        Inquiry Topic
+                      </label>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        {[
+                          "General Inquiry",
+                          "Custom Features",
+                          "Enterprise License",
+                          "Bug / Support",
+                        ].map((topic) => (
+                          <button
+                            type="button"
+                            key={topic}
+                            onClick={() => setContactTopic(topic)}
+                            className={`rounded-xl border py-2 px-2 text-[11px] font-semibold transition-all text-center ${
+                              contactTopic === topic
+                                ? "border-[#00A76F] bg-[#00A76F]/10 text-[#00A76F]"
+                                : "border-[#919EAB]/20 bg-[#F9FAFB] dark:bg-[#161C24] text-[#637381] dark:text-[#919EAB] hover:border-[#919EAB]/40"
+                            }`}
+                          >
+                            {topic}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-[#1C252E] dark:text-white mb-1.5">
+                        Your Message *
+                      </label>
+                      <textarea
+                        required
+                        rows={4}
+                        placeholder="Tell us about your project requirements or what you need help with..."
+                        value={contactMessage}
+                        onChange={(e) => setContactMessage(e.target.value)}
+                        className="w-full rounded-xl border border-[#919EAB]/20 bg-[#F9FAFB] dark:bg-[#161C24] p-3 text-xs text-[#1C252E] dark:text-white placeholder:text-[#919EAB] focus:border-[#00A76F] focus:outline-none transition-colors"
+                      />
+                    </div>
+
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full bg-[#00A76F] hover:bg-[#007b55] text-white font-bold text-xs rounded-xl h-11 shadow-lg shadow-[#00A76F]/20 gap-2 transition-all cursor-pointer"
+                    >
+                      {isSubmitting ? (
+                        <span>Sending message...</span>
+                      ) : (
+                        <>
+                          <Send className="h-4 w-4" />
+                          <span>Submit Message</span>
+                        </>
+                      )}
+                    </Button>
+                  </form>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 10. BOTTOM CTA BANNER                                                     */}
       {/* ========================================================================= */}
       <section className="py-20 border-t border-[#919EAB]/12 bg-white dark:bg-[#1E2632]/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1071,6 +1312,9 @@ export default function LandingPage() {
             </a>
             <a href="#pricing" className="hover:text-[#1C252E] dark:hover:text-white transition-colors">
               Pricing
+            </a>
+            <a href="#contact" className="hover:text-[#1C252E] dark:hover:text-white transition-colors">
+              Contact
             </a>
             <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="hover:text-[#1C252E] dark:hover:text-white transition-colors">
               GitHub
