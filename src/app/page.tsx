@@ -45,7 +45,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 const DASHBOARD_URL = "https://minimal-indol.vercel.app";
-const GITHUB_URL = "https://github.com/Tushar8640/minimal";
+const GITHUB_URL = "https://github.com/Tushar8640/shadminimal-landing";
+const GITHUB_PROFILE = "https://github.com/Tushar8640";
+const CONTACT_EMAIL = "tusar.imran.dev@gmail.com";
 
 function GithubIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
@@ -225,18 +227,40 @@ export default function LandingPage() {
   const [contactMessage, setContactMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!contactName.trim() || !contactEmail.trim() || !contactMessage.trim()) return;
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setErrorMessage("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: contactName,
+          email: contactEmail,
+          topic: contactTopic,
+          message: contactMessage,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to submit message. Please try again.");
+      }
+
       setIsSubmitted(true);
       setContactName("");
       setContactEmail("");
       setContactMessage("");
-    }, 600);
+    } catch (err: any) {
+      setErrorMessage(err.message || "Something went wrong. Please try again or email us directly.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -1066,10 +1090,10 @@ export default function LandingPage() {
                     <h4 className="text-sm font-bold text-[#1C252E] dark:text-white">Direct Email</h4>
                     <p className="text-xs text-[#919EAB] mt-0.5">Reach our dedicated developer team</p>
                     <a
-                      href="mailto:support@shadminimal.dev"
+                      href={`mailto:${CONTACT_EMAIL}`}
                       className="text-xs font-semibold text-[#00A76F] hover:underline mt-1 inline-block"
                     >
-                      support@shadminimal.dev
+                      {CONTACT_EMAIL}
                     </a>
                   </div>
                 </div>
@@ -1115,12 +1139,12 @@ export default function LandingPage() {
                   Contribute to the roadmap, report issues, and chat with hundreds of builders using ShadMinimal.
                 </p>
                 <a
-                  href={GITHUB_URL}
+                  href={GITHUB_PROFILE}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-1 text-xs font-bold text-[#00A76F] hover:underline pt-1"
                 >
-                  <span>Visit GitHub Community</span>
+                  <span>Visit @Tushar8640 on GitHub</span>
                   <ExternalLink className="h-3 w-3" />
                 </a>
               </div>
@@ -1219,6 +1243,12 @@ export default function LandingPage() {
                         className="w-full rounded-xl border border-[#919EAB]/20 bg-[#F9FAFB] dark:bg-[#161C24] p-3 text-xs text-[#1C252E] dark:text-white placeholder:text-[#919EAB] focus:border-[#00A76F] focus:outline-none transition-colors"
                       />
                     </div>
+
+                    {errorMessage && (
+                      <div className="p-3 rounded-xl bg-[#FF5630]/10 border border-[#FF5630]/20 text-xs font-semibold text-[#FF5630] animate-in fade-in">
+                        {errorMessage}
+                      </div>
+                    )}
 
                     <Button
                       type="submit"

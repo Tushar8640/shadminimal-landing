@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   description:
     "ShadMinimal is an ultra-clean, pixel-perfect UI kit built with Next.js 16 App Router, Tailwind CSS 4, and shadcn/ui. Featuring 7+ interactive dashboards, 6 full apps, and dynamic real-time color presets.",
   applicationName: "ShadMinimal",
-  authors: [{ name: "Tushar & ShadMinimal Team", url: "https://github.com/Tushar8640" }],
+  authors: [{ name: "Tushar Imran", url: "https://github.com/Tushar8640" }],
   generator: "Next.js 16",
   keywords: [
     "Next.js 16 dashboard",
