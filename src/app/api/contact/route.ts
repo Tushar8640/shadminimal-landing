@@ -70,23 +70,33 @@ export async function POST(req: Request) {
       }
     }
 
-    // 2. Send Email via Nodemailer (if SMTP credentials configured)
-    const smtpUser = process.env.SMTP_USER;
+    // 2. Send Email via Nodemailer
+    const smtpUser = process.env.SMTP_USER || DEFAULT_RECEIVER_EMAIL;
     const smtpPass = process.env.SMTP_PASS;
-    const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com";
-    const smtpPort = parseInt(process.env.SMTP_PORT || "465", 10);
+    let emailError: string | null = null;
 
-    if (smtpUser && smtpPass) {
+    if (smtpPass) {
       try {
-        const transporter = nodemailer.createTransport({
-          host: smtpHost,
-          port: smtpPort,
-          secure: smtpPort === 465,
-          auth: {
-            user: smtpUser,
-            pass: smtpPass,
-          },
-        });
+        const isGmail = !process.env.SMTP_HOST || process.env.SMTP_HOST === "smtp.gmail.com";
+        const transportOptions = isGmail
+          ? {
+              service: "gmail",
+              auth: {
+                user: smtpUser,
+                pass: smtpPass,
+              },
+            }
+          : {
+              host: process.env.SMTP_HOST,
+              port: parseInt(process.env.SMTP_PORT || "465", 10),
+              secure: (process.env.SMTP_PORT || "465") === "465",
+              auth: {
+                user: smtpUser,
+                pass: smtpPass,
+              },
+            };
+
+        const transporter = nodemailer.createTransport(transportOptions as any);
 
         await transporter.sendMail({
           from: `"ShadMinimal Contact" <${smtpUser}>`,
@@ -132,11 +142,13 @@ export async function POST(req: Request) {
 
         emailSent = true;
       } catch (mailErr: any) {
-        console.error("Email send error:", mailErr.message);
+        console.error("Nodemailer send error:", mailErr.message);
+        emailError = mailErr.message;
       }
     } else {
+      emailError = "SMTP_PASS (Gmail App Password) not configured in environment variables.";
       console.log(
-        `[ShadMinimal] Contact received for ${receiverEmail}. (SMTP credentials not yet provided in env). Telegram dispatch status: ${telegramSent}`
+        `[ShadMinimal] Contact received for ${receiverEmail}. Nodemailer is ready; waiting for SMTP_PASS. Telegram dispatch status: ${telegramSent}`
       );
     }
 
@@ -145,6 +157,7 @@ export async function POST(req: Request) {
       message: "Your message has been sent successfully!",
       telegramSent,
       emailSent,
+      emailError: emailSent ? undefined : emailError,
     });
   } catch (error: any) {
     console.error("Contact API handler error:", error);
