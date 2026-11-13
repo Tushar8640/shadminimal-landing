@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 // Default bot & chat credentials (can be overridden by environment variables)
-const DEFAULT_TELEGRAM_BOT_TOKEN = "9296605058:AAGNq_Jw1ZEPqmG1oJAsxl5RX7ouh7OD5Og";
+const DEFAULT_TELEGRAM_BOT_TOKEN = "9294400257:AAFG3bKbWXQ2goUNEupupfunHmmFgLxHros";
 const DEFAULT_TELEGRAM_CHAT_ID = "8123552123";
 const DEFAULT_RECEIVER_EMAIL = "tusar.imran.dev@gmail.com";
 
