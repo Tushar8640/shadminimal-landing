@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-// Default bot & chat credentials (can be overridden by environment variables)
-const DEFAULT_TELEGRAM_BOT_TOKEN = "9294400257:AAFG3bKbWXQ2goUNEupupfunHmmFgLxHros";
-const DEFAULT_TELEGRAM_CHAT_ID = "8123552123";
-const DEFAULT_RECEIVER_EMAIL = "tusar.imran.dev@gmail.com";
+// Bot & email settings from environment variables
+const RECEIVER_EMAIL = process.env.CONTACT_RECEIVER_EMAIL || "tusar.imran.dev@gmail.com";
 
 export async function POST(req: Request) {
   try {
@@ -27,9 +25,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const botToken = process.env.TELEGRAM_BOT_TOKEN || DEFAULT_TELEGRAM_BOT_TOKEN;
-    const chatId = process.env.TELEGRAM_CHAT_ID || DEFAULT_TELEGRAM_CHAT_ID;
-    const receiverEmail = process.env.CONTACT_RECEIVER_EMAIL || DEFAULT_RECEIVER_EMAIL;
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID;
+    const receiverEmail = process.env.CONTACT_RECEIVER_EMAIL || "tusar.imran.dev@gmail.com";
 
     let telegramSent = false;
     let emailSent = false;
@@ -71,7 +69,7 @@ export async function POST(req: Request) {
     }
 
     // 2. Send Email via Nodemailer
-    const smtpUser = process.env.SMTP_USER || DEFAULT_RECEIVER_EMAIL;
+    const smtpUser = process.env.SMTP_USER || receiverEmail;
     const smtpPass = process.env.SMTP_PASS;
     let emailError: string | null = null;
 
